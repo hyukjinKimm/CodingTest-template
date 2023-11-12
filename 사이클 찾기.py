@@ -27,7 +27,7 @@ cycle = False # 사이클 발생 여부
 for i in range(e):
     a, b = map(int, input().split())
     # 사이클이 발생한 경우 종료
-    if find_parent(parent, a) == find_parent(parent, b):
+    if find_parent(parent, a) == find_parent(parent, b): # 이순간 현재 간선을 기준으로 모든 루트노드가 업데이트 됨.
         cycle = True
         break
     # 사이클이 발생하지 않았다면 합집합(Union) 연산 수행

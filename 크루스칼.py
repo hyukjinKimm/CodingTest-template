@@ -38,7 +38,8 @@ for edge in edges:
         cost, a, b = edge
         #사이클이 발생하지 않는 경우에만 집합에 포함
         if find_parent(parent, a) != find_parent(parent, b):
-                union_parent(parent, a, b)
+                union_parent(parent, a, b) # 1. 여기서는 parent 테이블이 루트 노드를 가리키지 않을 수도있다.
+                                           # 2. 하지만 if 조건절에서 find_parent 를 실행함으로서 업데이트 된 parent 끼리 비교가 가능함.
                 result += cost
 
 print(result)

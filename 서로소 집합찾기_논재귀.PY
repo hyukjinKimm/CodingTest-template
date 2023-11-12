@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/52999797/algorithm-to-find-a-root-of-directed-graph
