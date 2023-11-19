@@ -6,14 +6,3 @@ n = 5
 print(bisect_left(nums, n))
 print(bisect_right(nums, n))
 
-nums = [5]
-n = 5
-
-print(bisect_left(nums, n))
-print(bisect_right(nums, n))
-
-print('here')
-print(list("fro??"))
-print(bisect_left(["a", "?"], '?'))
-
-print(sorted("for??"))
