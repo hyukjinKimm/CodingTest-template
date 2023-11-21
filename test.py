@@ -1,56 +1,33 @@
+import heapq
 import sys
-
-sys.setrecursionlimit(10**6)
 from collections import deque
-from  itertools import combinations
+from itertools import combinations
+sys.setrecursionlimit(10**6)
+sys.stdin=open("input.txt", "r")
+def solution(food_times, k):
+    if sum(food_times) <= k: # 전체 음식을 먹는 시간보다 k가 크거나 같으면 -1
+        return -1
+    
+    q = [] 
+    for i in range(len(food_times)):
+        heapq.heappush(q, (food_times[i], i+1)) # (음식시간, 음식번호)를 우선순위 큐에 삽입
+        
+    sum_value = 0 #  먹기 위해 사용한 시간
+    previous = 0 # 직전에 다 먹은 음식 시간
+    length = len(food_times) # 남은 음식의 개수
+    
+    # "먹기 위해 사용한 시간 + (현재 음식 시간 - 이전 음식 시간) * 현재 남은 음식 개수" 와 "k" 비교
+    while sum_value + ((q[0][0] - previous) * length) <= k: 
+        now = heapq.heappop(q)[0] # 현재 음식 시간
+        sum_value += (now - previous) * length 
+        length -= 1 # 다 먹은 음식 제외
+        previous = now # 이전 음식을 현재 음식으로
+        
+    result = sorted(q, key = lambda x: x[1]) # 음식 번호 기준으로 정렬하여 저장
+    
+    return result[(k - sum_value) % length][1] # 반복문을 돌지는 않지만,
 
-
-board = [list(map(int, input().split())) for _ in range(10)]
-
-
-paper = [0] * 6
-def D(x, y):
-  global ans 
-
-  if x == 10:
-    ans = min(ans, sum(paper))
-    return
-  if y == 10:
-    D(x+1, 0)
-    return
-
-  if board[x][y] == 0:
-    D(x, y+1)
-    return
-
-  for sz in range(1, 6):
-    if is_possible(x, y, sz):
-      mark(x, y, sz, 0)
-      D(x, y+1)
-      mark(x, y, sz, 1)
-
-  
-def is_possible(x, y, sz):
-
-  if paper[sz] == 5:
-    return False 
-  if x + sz > 10 or y + sz > 10:
-    return False 
-  
-  for i in range(sz):
-    for j in range(sz):
-      if board[x+i][y+j] != 1:
-        return False 
-  return True
-def mark(x, y, sz, v):
-  for i in range(sz):
-    for j in range(sz):
-      board[x+i][y+j] = v
-  if v:
-    paper[sz] -= 1
-  else:
-    paper[sz] += 1
-  
-ans = 25 
-D(0, 0)
-print(-1 if ans == 25 else ans)
+if __name__ == "__main__":
+    food_array = [2, 6, 5, 1, 2]
+    k = 10
+    print(solution(food_array, k))
