@@ -17,28 +17,26 @@ dy = [0, 1, 0, -1]
 
 
 
-
 if __name__ == "__main__":
-  N = int(input())
-  t = [0]
-  p = [0]
-  for i in range(N):
-    a, b = map(int, sys.stdin.readline().strip().split())
-    t.append(a)
-    p.append(b)
-  dy = [0] * (N+2)
+  N =int(input())
+  # 1로 가는 최소 계산 횟수들.
+  dy = [0] * (N+1)
 
-  maxVal = 0
-  for i in range(N, 0, -1):
-    if t[i] + i <= N+1:
-      dy[i] = max(p[i] + dy[t[i]+i], maxVal)
-      maxVal = dy[i]
-    else:
-      dy[i] = maxVal
-  print(dy[1])
+  for i in range(2, N+1):
+    dy[i] = dy[i-1] + 1
 
+    if i % 5 == 0:
+      dy[i] = min(dy[i], dy[i//5]+1)
+    if i % 3 == 0:
+      dy[i] = min(dy[i], dy[i//3]+1)
+    if i % 2 == 0:
+      dy[i] = min(dy[i], dy[i//2]+1)
+  
+  print(dy[N])
 
-           
+    
+
+    
 
 
     

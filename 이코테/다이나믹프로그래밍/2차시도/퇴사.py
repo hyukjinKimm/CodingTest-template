@@ -28,13 +28,12 @@ if __name__ == "__main__":
     p.append(b)
   dy = [0] * (N+2)
 
-  maxVal = 0
+ 
   for i in range(N, 0, -1):
     if t[i] + i <= N+1:
-      dy[i] = max(p[i] + dy[t[i]+i], maxVal)
-      maxVal = dy[i]
+      dy[i] = max(p[i] + dy[t[i]+i], dy[i+1])
     else:
-      dy[i] = maxVal
+      dy[i] = dy[i+1]
   print(dy[1])
 
 
