@@ -1,4 +1,2 @@
-from itertools import product
-arr = [1,2,3,4]
-
-1 * (1/0)
+n = 10
+print("{0:%2d}".format(n))

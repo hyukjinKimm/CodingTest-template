@@ -24,15 +24,23 @@ dy = [0, 1, 0, -1]
 
 
 
-
 if __name__ == "__main__":
-  n, m = map(int, input().split())
+  n = int(input())
   arr = list(map(int, input().split()))
-  minVal = float('inf')
-  for item in combinations(arr, 3):
-    if sum(item) <= m:
-      if m - sum(item) < minVal:
-        minVal = m - sum(item)
-        res = sum(item)
-  print(res)
-
+  arr.sort()
+  m = int(input())
+  brr = list(map(int, input().split()))
+  for b in brr:
+    lt = 0 
+    rt = n-1
+    while(lt<=rt):
+      mid = (lt+rt) // 2
+      if arr[mid] == b:
+        print(1)
+        break
+      elif arr[mid] > b:
+        rt = mid - 1
+      else:
+        lt = mid + 1
+    else:
+      print(0)
