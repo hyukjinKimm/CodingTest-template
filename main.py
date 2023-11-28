@@ -26,13 +26,28 @@ dy = [0, 1, 0, -1]
 
 
 if __name__ == "__main__":
-  n, m = map(int, input().split())
-  arr = list(map(int, input().split()))
-  minVal = float('inf')
-  for item in combinations(arr, 3):
-    if sum(item) <= m:
-      if m - sum(item) < minVal:
-        minVal = m - sum(item)
-        res = sum(item)
-  print(res)
-
+  n = int(input())
+  info = []
+  for i in range(n):
+    tmp = list(map(int, sys.stdin.readline().strip().split()))
+    info.append((i, tmp[0], tmp[1]))
+  # 몸무게 역순으로 정렬한다.
+  info.sort(reverse=True, key=lambda x:x[1])
+  res =[0] * (n)
+  cnt = 1
+  for i in range(n):
+    xi, xw, xh = info[i]
+    if res[xi] == 0:
+      tmp = 1
+      res[xi] = cnt
+      for j in range(i+1, n):
+        yi, yw, yh = info[j]
+        if xw == yw or xh <= yh:
+          res[yi] = cnt
+          tmp += 1
+      cnt += tmp
+    
+        
+    
+  for r in res:
+    print(r, end = ' ')
