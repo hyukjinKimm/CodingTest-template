@@ -17,37 +17,57 @@ dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
 
 
+def dfs(x):
+  print(x, end = ' ')
+  visited1[x] = 1
+  for next in graph[x]:
+    if visited1[next] == 0:
+      dfs(next)
+  
 
+def bfs(x):
+  visited2[x] = 1
+  q = deque([])
+  q.append(x)
+  while(q):
+    now = q.popleft()
+    print(now, end = ' ')
+    for next in graph[now]:
+      if visited2[next] == 0:
+        visited2[next] = 1
+        q.append(next)
 
-    
+  
 
 
 
 
 
 if __name__ == "__main__":
-  n = int(input())
-  info = []
-  for i in range(n):
-    tmp = list(map(int, sys.stdin.readline().strip().split()))
-    info.append((i, tmp[0], tmp[1]))
-  # 몸무게 역순으로 정렬한다.
-  info.sort(reverse=True, key=lambda x:x[1])
-  res =[0] * (n)
-  cnt = 1
-  for i in range(n):
-    xi, xw, xh = info[i]
-    if res[xi] == 0:
-      tmp = 1
-      res[xi] = cnt
-      for j in range(i+1, n):
-        yi, yw, yh = info[j]
-        if xw == yw or xh <= yh:
-          res[yi] = cnt
-          tmp += 1
-      cnt += tmp
-    
+  n, m, v = map(int, input().split())
+  graph = [[] for _ in range(n+1)]
+
+  for i in range(m):
+    x, y = map(int, sys.stdin.readline().strip().split())
+    graph[x].append(y)
+    graph[y].append(x)
+  for i in range(m):
+    graph[i].sort()
+  
+  visited1 = [0] * (n+1)
+  visited2 = [0] * (n+1)
+ 
+  dfs(v)
+  print()
+  bfs(v)
+  
+
+  
+  
         
+
+      
+
     
-  for r in res:
-    print(r, end = ' ')
+
+
