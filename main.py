@@ -19,23 +19,40 @@ dy = [0, 1, 0, -1]
 
 
 
-
-# 1 익음 0 익지않음 -1 없음
 if __name__ == "__main__":
   n = int(input())
-  cand = []
-  end = math.sqrt(n)
-  # end 는 소수일 수 있다 .
-  # 딱 나누어 떨어지면 end + 1까지 가 범위 
-  # 소수이면 
-  for i in range(1, int(math.sqrt(n))+1):
-    cand.append(i**2)
+  h = []
+  for i in range(n):
+    a, b, c = map(int, sys.stdin.readline().strip().split())
+    h.append((('R', a), ('G', b), ('B', c)))
+  
+  res = float('inf')
+  for i in range(3):
+    color, tmp = h[0][i]
+    print(color, tmp)
+    for j in range(1, n):
+      arr = list(h[j])
+      arr.sort(key = lambda x: x[1])
+      q = deque(list(arr))
+      while(q):
+        c, cost = q.popleft()
+        if c == color:
+          continue
+        color = c 
+        tmp += cost 
+        break
+    print(tmp)
+      
+    res = min(tmp, res)
+  print(res)
+
+
+
+
+
+
+    
+
+
 
   
-  for i in range(1, 4):
-    for item in combinations_with_replacement(cand, i):
-      if sum(item) == n:
-        print(i)
-        sys.exit()
-  else:
-    print(4)

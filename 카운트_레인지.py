@@ -9,3 +9,7 @@ def count_range(array, left_value, right_value):
 
     return right_index - left_index
 
+
+test = [1, 2, 3, 4, 4, 4, 5]
+print(bisect_left(test, 4))
+print(bisect_right(test, 4))
