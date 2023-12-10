@@ -50,3 +50,15 @@ def multi (a,n):
           return (tmp  * tmp *a) %c
 multi(a, b)
 
+# 약수 `갯수구하기 시간복잡도  O(N**(1/2))
+def getMyDivisor(n):
+
+    res = 0
+
+    for i in range(1, int(n**(1/2)) + 1):
+        if (n % i == 0):
+            res += 1
+            if ( (i**2) != n) : 
+                res += 1
+
+    return res
