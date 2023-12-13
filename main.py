@@ -20,8 +20,8 @@ sys.stdin=open("input.txt", "r")
 
 
 
-dx = [-1, 0, 0, 1]
-dy = [0, -1, 1, 0]
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
 
 
 
@@ -35,24 +35,37 @@ dy = [0, -1, 1, 0]
 
 
 input = sys.stdin.readline
+
+def solution(s):
+    n = len(s)
+    answer = n 
+
+    for i in range(1, n//2+1):
+        cnt = 1
+        word = s[:i]
+        compress = ""
+        for j in range(i, n, i):
+            if s[j:j+i] == word:
+                cnt += 1
+                continue
+            if cnt == 1:
+                compress += word 
+                word = s[j:j+i]
+            else:
+                compress = compress + str(cnt) + word
+                cnt = 1
+                word = s[j:j+i]
+        else:
+            if cnt == 1:
+                compress += word 
+            else:
+                compress = compress + str(cnt) + word 
+
+            answer = min(answer, len(compress))
+            
     
+    return answer
 
-        
-def dfs(x, s, t):
-  global res
-  if t > k:
-    return
-  if x == n:
-    res = max(res, s)
-    return
-
-  dfs(x+1, s+st[x][0], t+st[x][1])
-  dfs(x+1, s, t)
 if __name__ == "__main__":
-  n, k = map(int, input().strip().split())
-  st = []
-  for i in range(n):
-    st.append(list(map(int, input().strip().split())))
-  res = -1
-  dfs(0,0,0)
-  print(res)
+ s = "xababcdcdababcdcd"
+ print(solution(s))
