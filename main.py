@@ -31,41 +31,38 @@ dy = [0, 1, 0, -1]
 
 
 
-
-
-
 input = sys.stdin.readline
 
-def solution(s):
-    n = len(s)
-    answer = n 
 
-    for i in range(1, n//2+1):
-        cnt = 1
-        word = s[:i]
-        compress = ""
-        for j in range(i, n, i):
-            if s[j:j+i] == word:
-                cnt += 1
-                continue
-            if cnt == 1:
-                compress += word 
-                word = s[j:j+i]
+             
+   
+   
+def solution(n, weak, dist):
+    w = len(weak)
+    for i in range(w):
+       weak.append(n+weak[i])
+    res = float('inf')
+    for i in range(w):
+       for friend in permutations(dist, len(dist)):
+         cnt = 0
+         end = friend[cnt] + weak[i]
+         for j in range(i+1, i+w):
+            if weak[j] > end:
+               cnt += 1
+               if cnt >= len(dist):
+                  break 
+               end = weak[j] + friend[cnt]
             else:
-                compress = compress + str(cnt) + word
-                cnt = 1
-                word = s[j:j+i]
-        else:
-            if cnt == 1:
-                compress += word 
-            else:
-                compress = compress + str(cnt) + word 
-
-            answer = min(answer, len(compress))
-            
-    
-    return answer
+               continue
+         else:
+            res = min(cnt+1, res)
+    if res == float('inf'):
+       return -1 
+    return res
+  
 
 if __name__ == "__main__":
- s = "xababcdcdababcdcd"
- print(solution(s))
+  n = 12
+  weak = 	[1, 5, 6, 10]
+  dist = [1, 2, 3, 4]
+  print(solution(n, weak, dist))
