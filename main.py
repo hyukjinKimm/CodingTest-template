@@ -27,42 +27,63 @@ dy = [0, 1, 0, -1]
 
 
 
-
-
-
-
-input = sys.stdin.readline
-
-
-             
-   
-   
-def solution(n, weak, dist):
-    w = len(weak)
-    for i in range(w):
-       weak.append(n+weak[i])
-    res = float('inf')
-    for i in range(w):
-       for friend in permutations(dist, len(dist)):
-         cnt = 0
-         end = friend[cnt] + weak[i]
-         for j in range(i+1, i+w):
-            if weak[j] > end:
-               cnt += 1
-               if cnt >= len(dist):
-                  break 
-               end = weak[j] + friend[cnt]
-            else:
-               continue
-         else:
-            res = min(cnt+1, res)
-    if res == float('inf'):
-       return -1 
+def next_move(x1y1, x2y2, n):
+    x1, y1 = x1y1 
+    x2, y2 = x2y2
+    res = []
+    for i in range(4):
+        nx1 = x1 + dx[i]
+        ny1 = y1 + dy[i]
+        nx2 = x2 + dx[i]
+        ny2 = y2 + dy[i]
+        if possible(x1y1, x2y2):
+          res.append(((nx1, ny1), (nx2, ny2)))
+    
+    if x1 == x2:
+      if
+      for i in [1, -1]:
+          res.append(((x1, y1), (x1+i, y1)))
+          res.append(((x2, y2), (x2+i, y2)))
+    else:
+        for i in [1, -1]:
+            res.append(((x2, y2), (x2, y2+i)))
+            res.append(((x1, y1), (x1, y1+i)))
     return res
-  
+
+def possible(nx1ny1, nx2ny2, n, board):
+    x1, y1 = nx1ny1
+    x2, y2 = nx2ny2
+
+    if 0 <= x1 < n and 0 <= x2 < n and 0 <= y1 < n and 0 <= y2 < n and board[x1][y1] != 1  and board[x2][y2] != 1:
+        return True 
+    return False
+input = sys.stdin.readline
+def solution(board):
+    n = len(board)
+    visited =[{(0, 0), (0, 1)}]
+    q = deque([((0, 0), (0, 1), 0)])
+
+    while(q):
+        x1y1, x2y2, d = q.popleft()
+        if x1y1 == (n-1, n-1) or x2y2 == (n-1, n-1):
+            return d
+        # next = [( (x1, y1), (x2, y2) )]
+        next = next_move(x1y1, x2y2, n)
+        print(next)
+        break
+        for nx1ny1, nx2ny2 in next:
+            if {nx1ny1, nx2ny2} not in visited and possible(nx1ny1, nx2ny2, n, board):
+                visited.append({nx1ny1, nx2ny2})
+                q.append((nx1ny1, nx2ny2, d+1))
+            
+
+
+
 
 if __name__ == "__main__":
-  n = 12
-  weak = 	[1, 5, 6, 10]
-  dist = [1, 2, 3, 4]
-  print(solution(n, weak, dist))
+ board = [[0, 0, 0, 1, 1],
+          [0, 0, 0, 1, 0],
+          [0, 1, 0, 1, 1],
+          [1, 1, 0, 0, 1],
+          [0, 0, 0, 0, 0]]
+ print(solution(board))

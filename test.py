@@ -1,6 +1,3 @@
-print(ord('A'), ord('a'))
-a = set()
-a.add((1, 2, 3))
-print(list(a))
-for x in a:
-    print(x)
+v = [{(1, 1), (2, 2)}]
+if {(1, 1), (4, 2)} in v:
+    print('hi')
