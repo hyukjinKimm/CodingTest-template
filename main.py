@@ -36,25 +36,25 @@ input = sys.stdin.readline
            
 
 
-
-# 리스트를 n 개씩 자르는 함수
-def list_chunk(lst, n):
-    return [lst[i:i+n] for i in range(0, len(lst), n)]
-
-   
+INF = 1e9
 if __name__ == "__main__":
-  a = input().strip()
-  b = input().strip()
-  dy = [[0] * (len(b)+1) for _ in range(len(a)+1)]
-  for i in range(len(b)+1):
-     dy[0][i] = i 
-  for i in range(len(a)+1):
-     dy[i][0] = i
-  for i in range(1, len(a)+1):
-     for j in range(1, len(b)+1):
-        if a[i-1] == b[j-1]:
-           # 같은 문자일경우 
-           dy[i][j] = dy[i-1][j-1]
-        else:
-           dy[i][j] = min(dy[i-1][j-1], dy[i-1][j], dy[i][j-1]) + 1
-  print(dy[len(a)][len(b)])
+
+# 처음 모든 수가 소수(True)로 초기화(0, 1 제외) 
+    a, n = map(int, input().strip().split())
+    array = [True for i in range(n+1)]
+    array[1] = False
+    # 2부터 n의 제곱근까지 모든 수를 확인
+    for i in range(2, int(math.sqrt(n)) + 1):
+    # i가 소수인경우(False를 제외하고 남은 수인 경우)
+        if array[i] == True:
+
+    # i를 제외한 i의 모든 배수를 지우기
+            j = 2
+            while i * j <= n:
+                array[i * j] = False
+                j = j + 1
+
+    # 모든 소수 출력
+    for i in range(a, n+1):
+        if array[i]:
+            print(i)
