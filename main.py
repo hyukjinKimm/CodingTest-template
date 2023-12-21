@@ -26,35 +26,44 @@ dy = [0, 1, 0, -1]
 
 
 
+
 input = sys.stdin.readline
 
    
-       
-    
-       
-
-           
-
-
-INF = 1e9
 if __name__ == "__main__":
+  n, m, b = map(int, input().strip().split())
+  board = []
+  for _ in range(n):
+    board.append(list(map(int, input().strip().split())))
+  minVal = float('inf')
+  maxVal = -1
+  for i in range(n):
+    for j in range(m):
+      minVal = min(minVal, board[i][j])
+      maxVal = max(maxVal, board[i][j])
 
-# 처음 모든 수가 소수(True)로 초기화(0, 1 제외) 
-    a, n = map(int, input().strip().split())
-    array = [True for i in range(n+1)]
-    array[1] = False
-    # 2부터 n의 제곱근까지 모든 수를 확인
-    for i in range(2, int(math.sqrt(n)) + 1):
-    # i가 소수인경우(False를 제외하고 남은 수인 경우)
-        if array[i] == True:
+  res = float('inf')
+  for g in range(maxVal, minVal-1, -1):
+    time = 0
+    bb = b
+    for x in range(n):
+      for y in range(m):
+        if board[x][y] > g:
+          diff = board[x][y] - g 
+          time += diff*2 
+          bb += diff
+        elif board[x][y] < g:
+          bb -= (g-board[x][y])
+          time += (g-board[x][y])
+        
+    if bb >= 0 :
+      # 땅고르기가 가능 
+      if res > time:
+        res = min(res, time)
+        indexG = g
+  print(res, indexG)
 
-    # i를 제외한 i의 모든 배수를 지우기
-            j = 2
-            while i * j <= n:
-                array[i * j] = False
-                j = j + 1
 
-    # 모든 소수 출력
-    for i in range(a, n+1):
-        if array[i]:
-            print(i)
+      
+          
+
