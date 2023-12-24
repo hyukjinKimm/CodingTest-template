@@ -7,7 +7,7 @@ from itertools import permutations
 from itertools import product
 from itertools import combinations_with_replacement
 from bisect import bisect_left, bisect_right
-
+import re
 from bisect import bisect_left, bisect_right
 
 import math
@@ -28,42 +28,40 @@ dy = [0, 1, 0, -1]
 
 
 input = sys.stdin.readline
+   
+
+
+
+if __name__ == "__main__":
+  for _ in range(int(input().strip())):
+    f = input().strip()
+    x = int(input().strip())
+    if x:
+      arr = input().strip()[1:-1].split(',')
+    else:
+      input()
+      arr = []
+  
+    arr = deque(arr)
+    flag = True
+    for o in f:
+      if o == 'R':
+        flag = not flag 
+      else:
+        if not arr:
+          print('error')
+          break
+        if flag:
+          arr.popleft()
+        else:
+          arr.pop()
+    else:
+      arr = list(arr)
+      if flag:
+        print('[' + ",".join(arr)+ "]")
+      else:
+       print('[' + ",".join(arr[::-1])+ "]")
 
    
-if __name__ == "__main__":
-  n, m, b = map(int, input().strip().split())
-  board = []
-  for _ in range(n):
-    board.append(list(map(int, input().strip().split())))
-  minVal = float('inf')
-  maxVal = -1
-  for i in range(n):
-    for j in range(m):
-      minVal = min(minVal, board[i][j])
-      maxVal = max(maxVal, board[i][j])
-
-  res = float('inf')
-  for g in range(maxVal, minVal-1, -1):
-    time = 0
-    bb = b
-    for x in range(n):
-      for y in range(m):
-        if board[x][y] > g:
-          diff = board[x][y] - g 
-          time += diff*2 
-          bb += diff
-        elif board[x][y] < g:
-          bb -= (g-board[x][y])
-          time += (g-board[x][y])
-        
-    if bb >= 0 :
-      # 땅고르기가 가능 
-      if res > time:
-        res = min(res, time)
-        indexG = g
-  print(res, indexG)
-
-
-      
-          
-
+    
+    
