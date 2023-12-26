@@ -23,40 +23,45 @@ sys.stdin=open("input.txt", "r")
 dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
 
+ddx = [-1, 0, 1]
+ddy = [-1, 0, 1]
 
-
-def find_parent(parent, x):
-  # 루트 노드가 아니면, 루트 노드를 찾을때까지 재귀적으로 찾기
-  if parent[x] != x:
-    parent[x] = find_parent(parent, parent[x])
-  return parent[x]
- 
-# 두 원소가 속한 집합을 합치기
-def union_Parent(parent, a, b):
-  a = find_parent(parent, a)
-  b = find_parent(parent, b)
-  if a < b:
-    parent[b] = a
-  else:
-    parent[a] = b
 input = sys.stdin.readline
   
 
 
+
+
+  
 if __name__ == "__main__":
-  v, e = map(int, input().split())
-  parent = [0] * (v + 1)
+  n, m = map(int, input().strip().split())
+
+  l = [0] * (101)
+  s = [0] * (101)
+  for _ in range(n):
+    a, b = map(int, input().strip().split())
+    l[a] = b
+  for _ in range(m):
+    a, b = map(int, input().strip().split())
+    s[a] = b
   
-  for i in range(1, v + 1):
-    parent[i] = i
+  # q -> (현재위치, 주사위 던진 회수)
+  q = deque([(1, 0)])
+  visited = []
+  while(q):
+    
+    x, d = q.popleft()
+    if x >= 100:
+      print(d)
+      break
+    if l[x] != 0:
+      x = l[x]
+    elif s[x] != 0:
+      x = s[x]
+    for i in range(1, 7):
+      if (x, i) not in visited:
+        visited.append((x, i))
+        q.append((x+i, d+1))
+
+
   
-  for i in range(e):
-    a, b = map(int, input().split())
-    union_Parent(parent, a, b)
-  
-  #이걸 해줘야 부모 테이블이 루트 노드로 전부 업데이트 된다.
-  
-  for i in range(1, v + 1):
-    find_parent(parent, i)
-  
-  print(len(set(parent[1:])))
