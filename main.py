@@ -30,38 +30,35 @@ input = sys.stdin.readline
   
 
 
+INF = 1e9
+p =  1000000007
 
+
+            
 
   
-if __name__ == "__main__":
+
+if __name__ == "__main__": 
   n, m = map(int, input().strip().split())
-
-  l = [0] * (101)
-  s = [0] * (101)
-  for _ in range(n):
-    a, b = map(int, input().strip().split())
-    l[a] = b
-  for _ in range(m):
-    a, b = map(int, input().strip().split())
-    s[a] = b
+  if n == m:
+     print(0)
+     print(1)
+     sys.exit()
+  dis = [-1] * (100001)
+  dis[n] = 0
+  q = deque([(n, 0)])
+  res = 0
   
-  # q -> (현재위치, 주사위 던진 회수)
-  q = deque([(1, 0)])
-  visited = []
   while(q):
-    
-    x, d = q.popleft()
-    if x >= 100:
-      print(d)
-      break
-    if l[x] != 0:
-      x = l[x]
-    elif s[x] != 0:
-      x = s[x]
-    for i in range(1, 7):
-      if (x, i) not in visited:
-        visited.append((x, i))
-        q.append((x+i, d+1))
-
-
+     x, d = q.popleft()
+     if x == m:
+        res += 1
+        continue
+     for next in [x-1, x+1, 2*x]:
+        if 0 <= next <= 100000 and (dis[next] == -1 or dis[next] == d+1):
+          q.append((next, d+1))
+          dis[next] = d+1 
+  print(dis[m])
+  print(res)
   
+ 

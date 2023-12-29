@@ -27,7 +27,6 @@ def bellman_ford(start):
             cur_node = edges[j][0]
             next_node = edges[j][1]
             edge_cost = edges[j][2]
-            # 현재 간선을 거쳐서 다른 노드로 이동하는 거리가 더 짧은 경우
             # distance[cur_node] != INF  코드 제거.
             if distance[next_node] > distance[cur_node] + edge_cost:
                 distance[next_node] = distance[cur_node] + edge_cost
