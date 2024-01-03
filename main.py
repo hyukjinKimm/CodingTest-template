@@ -32,144 +32,61 @@ input = sys.stdin.readline
 
 INF = 1e9
 
-            
-
-  
+p = 1000000000
 
 
-
-def count():
-  res = 0
-  for i in range(r):
-    for j in range(c):
-      if board[i][j] > 0:
-        res += board[i][j]
-  return res 
-
-def spread():
- 
-# 확산되는 양은 Ar,c/5이고 소수점은 버린다. 즉, ⌊Ar,c/5⌋이다.
-# (r, c)에 남은 미세먼지의 양은 Ar,c - ⌊Ar,c/5⌋×(확산된 방향의 개수) 이다.
-  
-  dust = deque([])
-  for i in range(r):
-    for j in range(c):
-      if board[i][j] > 0:
-        dust.append((i, j))
-
-  tmpBoard = [[0] * c for _ in range(r)]
-  while(dust):
-    x, y = dust.popleft()
-    cnt = 0
-    cand = []
-    for i in range(4):
-      nx = x + dx[i]
-      ny = y + dy[i]
-      if 0 <= nx < r and 0 <= ny < c and board[nx][ny] != -1:
-        cand.append((nx, ny))
-        cnt += 1
-    if not cand:
-      continue
-    Arc = board[x][y]
-    bit = int(Arc/5)
-    for xx, yy in cand:
-      tmpBoard[xx][yy] += bit 
-    board[x][y] -= cnt*bit
-  for i in range(r):
-    for j in range(c):
-      board[i][j] += tmpBoard[i][j]
-  
-
-
-# 0, 1 
-# -1, 0
-# 0, -1
-# 1, 0
-
-upx = [0, -1, 0, 1]
-upy = [1, 0, -1, 0]
-
-# 0, 1
-# 1, 0
-# 0, -1
-# -1, 0
-donwx = [0, 1, 0, -1]
-donwy = [1, 0, -1, 0]
-
-def upAir():
-  x, y = cleaner[0] 
-  dir = 0
-  x += upx[dir]
-  y += upy[dir]
-  previous = 0
- 
-  while(1):
-   
-    nx = x + upx[dir]
-    ny = y + upy[dir]
-
-    if (x, y) == cleaner[0]:
-      break 
-
-    if not (0 <= nx < r and 0 <= ny < c):
-      dir += 1
-      continue
-
-    board[x][y], previous =  previous, board[x][y]
-    x = nx 
-    y = ny
-
+      
     
 
 
+# left_value <= x <= right_value
+def count_range(array, left_value, right_value):
+    right_index = bisect_right(array, right_value)
+    left_index = bisect_left(array, left_value)
 
-
-
-def donwAir():
-  x, y = cleaner[1] 
-  dir = 0
-  x += donwx[dir]
-  y += donwy[dir]
-  previous = 0
- 
-  while(1):
-    nx = x + donwx[dir]
-    ny = y + donwy[dir]
-
-    if (x, y) == cleaner[1]:
-      break 
-
-    if not (0 <= nx < r and 0 <= ny < c):
-      dir += 1
-      continue
-
-    board[x][y], previous =  previous, board[x][y]
-    x = nx 
-    y = ny
-
-
-
-  
-  
-
-
-r, c, t = map(int, input().strip().split())
-board = []
-for _ in range(r):
-  board.append(list(map(int, input().strip().split())))
-
-cleaner = []
-for i in range(r):
-  if board[i][0] == -1:
-    cleaner.append((i, 0))
+    return right_index - left_index
 
 
 if __name__ == "__main__": 
-  while(t):
-    spread()
-    upAir()
-    donwAir()
-    t -= 1
-  print(count())
+  T = int(input().strip())
+  A = int(input().strip())
+  # 접두사 합(Prefix Sum) 배열 계산
+  sum_value = 0
+  arr = [0]
+  for i in list(map(int, input().strip().split())):
+      sum_value += i
+      arr.append(sum_value)
+
+  B = int(input().strip())
+  sum_value = 0
+  brr = [0]
+  for i in list(map(int, input().strip().split())):
+      sum_value += i
+      brr.append(sum_value)
+  allArr = []
+  for left in range(1, A+1): # 첫번째 부터 A 번째 까지 
+     for right in range(left, A+1): # left 번째부터 A 번째 까지 
+       allArr.append(arr[right] - arr[left-1])
+        
+
+  allBrr = []
+  for left in range(1, B+1): # 첫번째 부터 A 번째 까지 
+     for right in range(left, B+1): # left 번째부터 A 번째 까지 
+       allBrr.append(brr[right] - brr[left-1])
+  allBrr.sort()
+
+  res = 0
+  for x in allArr:
+     find = T-x 
+
+     res += count_range(allBrr, find, find)
+  print(res)
+
+
+
   
+  
+  
+        
+        
   
