@@ -10,9 +10,6 @@ from bisect import bisect_left, bisect_right
 import re
 
 
-import math
-
-
 sys.setrecursionlimit(10**6)
 sys.stdin=open("input.txt", "r")
 
@@ -35,58 +32,76 @@ INF = 1e9
 p = 1000000000
 
 
-      
+def ccw(p1, p2, p3):
+    temp = (p1[0]*p2[1] + p2[0]*p3[1] + p3[0]*p1[1]) - (p2[0]*p1[1] + p3[0]*p2[1] + p1[0]*p3[1])
+    if temp > 0:
+        return 1
+    elif temp == 0:
+        return 0
+    else:
+        return -1
     
+def check(p1, p2, p3, p4):
+    
+    is_result = False
+    result = 0
+    p123 = ccw(p1, p2, p3)
+    p124 = ccw(p1, p2, p4)
+    p341 = ccw(p3, p4, p1)
+    p342 = ccw(p3, p4, p2)
+
+    if p123 * p124 == 0 and p341 * p342 == 0:
+        is_result = True
+        if min(p1[0], p2[0])<=max(p3[0],p4[0]) and min(p3[0],p4[0])<=max(p1[0],p2[0]) and min(p1[1],p2[1])<=max(p3[1],p4[1]) and min(p3[1],p4[1])<=max(p1[1],p2[1]):
+            result = 1
+
+    if p123 * p124 <= 0 and p341 * p342 <= 0:
+        if not is_result:
+            result = 1
+        
+    return result   
+
+     
+      
 
 
-# left_value <= x <= right_value
-def count_range(array, left_value, right_value):
-    right_index = bisect_right(array, right_value)
-    left_index = bisect_left(array, left_value)
-
-    return right_index - left_index
+def find_parent(parent, x):
+  # 루트 노드가 아니면, 루트 노드를 찾을때까지 재귀적으로 찾기
+  if parent[x] != x:
+    parent[x] = find_parent(parent, parent[x])
+  return parent[x]
+ 
+# 두 원소가 속한 집합을 합치기
+def union_Parent(parent, a, b):
+  a = find_parent(parent, a)
+  b = find_parent(parent, b)
+  if a < b:
+    parent[b] = a
+  else:
+    parent[a] = b
 
 
 if __name__ == "__main__": 
-  T = int(input().strip())
-  A = int(input().strip())
-  # 접두사 합(Prefix Sum) 배열 계산
-  sum_value = 0
-  arr = [0]
-  for i in list(map(int, input().strip().split())):
-      sum_value += i
-      arr.append(sum_value)
-
-  B = int(input().strip())
-  sum_value = 0
-  brr = [0]
-  for i in list(map(int, input().strip().split())):
-      sum_value += i
-      brr.append(sum_value)
-  allArr = []
-  for left in range(1, A+1): # 첫번째 부터 A 번째 까지 
-     for right in range(left, A+1): # left 번째부터 A 번째 까지 
-       allArr.append(arr[right] - arr[left-1])
-        
-
-  allBrr = []
-  for left in range(1, B+1): # 첫번째 부터 A 번째 까지 
-     for right in range(left, B+1): # left 번째부터 A 번째 까지 
-       allBrr.append(brr[right] - brr[left-1])
-  allBrr.sort()
-
-  res = 0
-  for x in allArr:
-     find = T-x 
-
-     res += count_range(allBrr, find, find)
-  print(res)
-
-
-
+  n = int(input().strip())
+  pos = []
+  for _ in range(n):
+    pos.append(list(map(int, input().strip().split())))
+  parent = [0] * (n+1)
+  for i in range(1, n+1):
+     parent[i] = i 
+  for i in range(1, n+1):
+     for j in range(i+1, n+1):
+        if check(i-1, j-1):
+          union_Parent(parent, i, j)
+  for i in range(1, n + 1):
+    find_parent(parent, i)
   
-  
-  
-        
-        
-  
+  res = [0] * (n+1)
+  for i in range(1, n+1):
+     res[parent[i]] += 1
+  print(len(set(parent[1:])))
+  print(max(res))
+    
+    
+
+ 

@@ -72,7 +72,7 @@ def bino_coef(n, k):
 # 6
 
 # 행렬곱셈
-def solution(arr1, arr2):
+def mul(arr1, arr2):
     answer = [[0]*len(arr2[0]) for _ in range(len(arr1))]
     for i in range(len(arr1)): 
         lists = []
@@ -80,3 +80,35 @@ def solution(arr1, arr2):
             for k in range(len(arr1[0])): 
                 answer[i][j] += arr1[i][k] * arr2[k][j]
     return answer
+
+
+# 두 선분의 교차 판별  check 함수로 확인.
+
+def ccw(p1, p2, p3):
+    temp = (p1[0]*p2[1] + p2[0]*p3[1] + p3[0]*p1[1]) - (p2[0]*p1[1] + p3[0]*p2[1] + p1[0]*p3[1])
+    if temp > 0:
+        return 1
+    elif temp == 0:
+        return 0
+    else:
+        return -1
+    
+def check(p1, p2, p3, p4):
+    
+    is_result = False
+    result = 0
+    p123 = ccw(p1, p2, p3)
+    p124 = ccw(p1, p2, p4)
+    p341 = ccw(p3, p4, p1)
+    p342 = ccw(p3, p4, p2)
+
+    if p123 * p124 == 0 and p341 * p342 == 0:
+        is_result = True
+        if min(p1[0], p2[0])<=max(p3[0],p4[0]) and min(p3[0],p4[0])<=max(p1[0],p2[0]) and min(p1[1],p2[1])<=max(p3[1],p4[1]) and min(p3[1],p4[1])<=max(p1[1],p2[1]):
+            result = 1
+
+    if p123 * p124 <= 0 and p341 * p342 <= 0:
+        if not is_result:
+            result = 1
+        
+    return result   
