@@ -3,12 +3,6 @@ import sys
 input = sys.stdin.readline
 sys.stdin=open("input.txt", "r")
 
-R=10000 # ROW
-C=500	# COL
-
-
-
-a = [1, 2, 3]
-b = a 
-a = [1, 5 ]
-print(b)
+a = '123'
+b = a.replace('3', 'a')
+print(b, a)
