@@ -23,47 +23,46 @@ dy = [0, 1, 0, -1]
 
           
        
-    
 
 
-def count_range(array, left_value, right_value):
-    right_index = bisect_right(array, right_value)
-    left_index = bisect_left(array, left_value)
-
-    return right_index - left_index
-
-
-def solution(words, queries):
-  a1 = [[] for _ in range(10001)]
-  a2 = [[] for _ in range(10001)]
-  
-  for w in words:
-     a1[len(w)].append(w)
-     a2[len(w)].append(w[::-1])
-  for i in range(10001):
-     a1[i].sort()
-     a2[i].sort()
-  
-  res = []
-  for q in queries:
-    if q[0] != '?':
-       
-       start = q.replace('?', 'a')
-       end = q.replace('?', 'z')
-       res.append(count_range(a1[len(q)], start, end))
-    else:
-       q = q[::-1]
-       start = q.replace('?', 'a')
-       end = q.replace('?', 'z')
-       res.append(count_range(a2[len(q)], start, end))
-  return res
-
+INF = int(1e9)
       
+def dijkstra(start):
+    q = []
+    
+	#시작 노드로 가기위한 최단경로는 0으로 설정하고 (우선순위)큐에 삽입
+    heapq.heappush(q,(0, start)) 
+    distance[start] = 0
 
-
-   
+	# 큐가 빌때까지
+    while q:
+        dist, now = heapq.heappop(q) # 거리가 가장 짧은 노드를 큐에서 꺼낸다.
+        # 현재 노드가 이미 처리된적 있는 노드라면 무시 -> 방문이 되었는지 확인하는것과 같은원리
+        # 현재 꺼낸 그 원소의 거리값(dist)이 테이블에 기록되어있는 값보다 더 크다면 이미 처리된것
+        if distance[now] < dist:
+          continue
+        for i in graph[now]:
+            cost = dist + i[1]
+            if cost < distance[i[0]]: #현재노드를 거쳐가는것과 기존의 값을 비교
+                distance[i[0]] = cost
+                heapq.heappush(q, (cost, i[0]))
 if __name__=="__main__":
-  words = ["frodo", "front", "frost", "frozen", "frame", "kakao"]
-  queries = ["fro??", "????o", "fr???", "fro???", "pro?"]
-  print(solution(words, queries))
+   # 노드의 개수, 간선의 개수 입력받기 
+   n, m = map(int, input().split())
+   start = 1
 
+   # 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트 생성
+   graph = [[] for _ in range(n+1)] #0번은 취급하지 않기위해 n+1길이만큼 생성 -> 노드연결정보
+
+   # 최단거리테이블을 모두 무한으로 초기화
+   distance = [INF] * (n+1) # 최단거리테이블
+   #모든 간성정보를 입력받기
+   for _ in range(m):
+      a,b= map(int, input().strip().split())
+      graph[a].append((b,1)) #a에서부터 b까지 가는 거리가 c다
+      graph[b].append((a, 1))
+   dijkstra(1)
+   print(bisect_left(distance, max(distance[1:])), max(distance[1:]), distance.count(max(distance[1:])))
+
+         
+         
