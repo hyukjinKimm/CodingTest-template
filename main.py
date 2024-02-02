@@ -7,6 +7,7 @@ from itertools import product
 from bisect import bisect_left, bisect_right
 import heapq
 import math
+import copy
 
 
 sys.setrecursionlimit(10**6)
@@ -17,52 +18,77 @@ input = sys.stdin.readline
             
 
 
-dx = [-1, 0, 1, 0]
-dy = [0, 1, 0, -1]
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
 
-          
-       
 
 
-INF = int(1e9)
+
       
-def dijkstra(start):
-    q = []
+
+
+
+
+
+
+
+
+
+
     
-	#시작 노드로 가기위한 최단경로는 0으로 설정하고 (우선순위)큐에 삽입
-    heapq.heappush(q,(0, start)) 
-    distance[start] = 0
 
-	# 큐가 빌때까지
-    while q:
-        dist, now = heapq.heappop(q) # 거리가 가장 짧은 노드를 큐에서 꺼낸다.
-        # 현재 노드가 이미 처리된적 있는 노드라면 무시 -> 방문이 되었는지 확인하는것과 같은원리
-        # 현재 꺼낸 그 원소의 거리값(dist)이 테이블에 기록되어있는 값보다 더 크다면 이미 처리된것
-        if distance[now] < dist:
-          continue
-        for i in graph[now]:
-            cost = dist + i[1]
-            if cost < distance[i[0]]: #현재노드를 거쳐가는것과 기존의 값을 비교
-                distance[i[0]] = cost
-                heapq.heappush(q, (cost, i[0]))
+
+    
+
+
+  
+
+
+
+        
+
+
+
+  
+
+
+
+
+  
+def dfs(x, y, c, s):
+  global res
+  if c == 4:
+    res = max(res, s)
+    return 
+  
+  for i in range(4):
+    nx = x + dx[i]
+    ny = y + dy[i]
+    if 0 <= nx < n and 0 <= ny < m and visited[nx][ny] == 0:
+
+      visited[nx][ny] = 1
+      if c == 2:
+        dfs(x, y, c+1, s+board[nx][ny])
+        
+      
+      dfs(nx, ny, c+1, s+board[nx][ny])
+      visited[nx][ny] = 0
+      
+
+
+  
+
 if __name__=="__main__":
-   # 노드의 개수, 간선의 개수 입력받기 
-   n, m = map(int, input().split())
-   start = 1
-
-   # 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트 생성
-   graph = [[] for _ in range(n+1)] #0번은 취급하지 않기위해 n+1길이만큼 생성 -> 노드연결정보
-
-   # 최단거리테이블을 모두 무한으로 초기화
-   distance = [INF] * (n+1) # 최단거리테이블
-   #모든 간성정보를 입력받기
-   for _ in range(m):
-      a,b= map(int, input().strip().split())
-      graph[a].append((b,1)) #a에서부터 b까지 가는 거리가 c다
-      graph[b].append((a, 1))
-   dijkstra(1)
-   print(bisect_left(distance, max(distance[1:])), max(distance[1:]), distance.count(max(distance[1:])))
-
-         
-         
+  n, m = map(int, input().strip().split())
+  board = []
+  for _ in range(n):
+    board.append(list(map(int, input().strip().split())))
+  visited = [[0] * m for _ in range(n)]
+  res = -1
+  for i in range(n):
+    for j in range(m):
+      visited[i][j] = 1
+      dfs(i,j,1,board[i][j])
+      visited[i][j] = 0
+  print(res)
