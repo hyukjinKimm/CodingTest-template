@@ -7,5 +7,7 @@ sys.stdin=open("input.txt", "r")
 test = [[1, 2, 3]]
 b = copy.copy(test)
 
-test[0] = 14
-print(b)
+for i in range(1, 1):
+  print('hi')
+else:
+  print('be')

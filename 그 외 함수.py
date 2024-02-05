@@ -112,3 +112,31 @@ def check(p1, p2, p3, p4):
             result = 1
         
     return result   
+
+
+# LCS (가장 긴 부분 수열 )
+
+a = input().strip()
+b = input().strip()
+ 
+w = len(a)
+h = len(b)
+ 
+graph = [[0] * (w + 1) for _ in range(h + 1)]
+ 
+for i in range(1, h+1):
+    for j in range(1, w+1):
+        if b[i-1] == a[j-1]:
+            graph[i][j] = graph[i-1][j-1] + 1
+        else:
+            graph[i][j] = max(graph[i][j-1], graph[i-1][j])
+
+
+# LCS (가장 긴 SUBSTRING )
+
+for i in range(1, h+1):
+    for j in range(1, w+1):
+        if b[i-1] == a[j-1]:
+            graph[i][j] = graph[i-1][j-1] + 1
+        else:
+            graph[i][j] = 0
