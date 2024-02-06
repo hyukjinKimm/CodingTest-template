@@ -28,45 +28,25 @@ dy = [0, 0, -1, 1]
 
 INF = int(1e9)
 
+mod = 1000000007
 
   
 
-   
     
 
-
 if __name__=="__main__":
- s = list(input().strip())
- bomb = input().strip()
- length = len(bomb)
-
- 
- while(1):
-   stack = []
-   flag = True
-   for c in s:
-   
-     stack.append(c)
-     if "".join(stack[-length:]) == bomb:
-       flag = False 
-       for i in range(length):
-         stack.pop()
-   
-   s = stack[:]
-   if len(s) == 0:
-     print("FRULA")
-     break 
-   if flag:
-     print("".join(s))
-     break 
-   
-
-     
-       
-       
-       
-     
-       
-     
-     
+  n, m = map(int, input().strip().split())
+  arr = []
+  for _ in range(n):
+    arr.append(list(map(int, input().strip().split())))
+  dy = [[0] * (n+1) for _ in range(n+1)]
+  for i in range(1, n+1):
+    dy[1][i] = dy[1][i-1] + arr[0][i-1]
+    dy[i][1] = dy[i-1][1] + arr[i-1][0]
+  for i in range(1, n+1):
+    for j in range(1, n+1):
+      dy[i][j] = dy[i-1][j] + dy[i][j-1] - dy[i-1][j-1] + arr[i-1][j-1]
+  for _ in range(m):
+    x1, y1, x2, y2 = map(int, input().strip().split())
+    print(dy[x2][y2] + dy[x1-1][y1-1] - dy[x1-1][y2] - dy[x2][y1-1])
   
