@@ -32,27 +32,56 @@ mod = 1000000007
   
 
   
+def ans(x, y, d):
+  
+  if dy[x][y][d] != -1: return dy[x][y][d]
+
+  dy[x][y][d] = 0
+
+  if board[x][y] == 1: return 0
+  if d == 0:
+    dy[x][y][d] += ans(x, y-1, 0)
+    dy[x][y][d] += ans(x, y-1, 1)
+  elif d == 1:
+    if board[x-1][y] == 1 or board[x][y-1] == 1:
+      dy[x][y][d] = 0
+    else:
+      dy[x][y][d] += ans(x-1, y-1, 0)
+      dy[x][y][d] += ans(x-1, y-1, 1)
+      dy[x][y][d] += ans(x-1, y-1, 2)
+  else:
+    dy[x][y][d] += ans(x-1, y, 1)
+    dy[x][y][d] += ans(x-1, y, 2)
+  return dy[x][y][d]
+
+
+
       
 
-def dfs(now, acc):
-  global res
-  if now > 1000000000: return 
-  if now == b:
-    res = min(res, acc)
-    return 
-  
-  dfs(now*2, acc+1)
-  dfs(10*now+1, acc+1)
+
+
 
 if __name__=="__main__":
-  a, b = map(int, input().strip().split())
-  res = INF
-  dfs(a, 0)
-  if res == INF:
-    print(-1)
-  else:
-    print(res+1)
+  n = int(input().strip())
+  board = []
+  for _ in range(n):
+    board.append(list(map(int, input().strip().split())))
+  dy = [[[-1, -1, -1] for _ in range(n)] for _ in range(n)]
   
+  dy[0][0] = [0, 0, 0]
+  dy[0][1] = [1, 0, 0]
+ 
+  for i in range(2, n):
+    if board[0][i] == 0:
+      dy[0][i] = dy[0][i-1][:]
+    else:
+      dy[0][i] = [0, 0, 0]
+  for i in range(n):
+    dy[i][0] = [0, 0, 0]
 
+  for k in range(3):
+    ans(n-1, n-1, k)
+    
+   
 
-  
+  print(sum(dy[n-1][n-1]))
