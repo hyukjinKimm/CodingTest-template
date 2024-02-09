@@ -18,8 +18,8 @@ input = sys.stdin.readline
             
 
 
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+dx = [0, -1, 0, 1]
+dy = [1, 0, -1, 0]
 
 
 
@@ -32,31 +32,8 @@ mod = 1000000007
   
 
   
-def ans(x, y, d):
-  
-  if dy[x][y][d] != -1: return dy[x][y][d]
-
-  dy[x][y][d] = 0
-
-  if board[x][y] == 1: return 0
-  if d == 0:
-    dy[x][y][d] += ans(x, y-1, 0)
-    dy[x][y][d] += ans(x, y-1, 1)
-  elif d == 1:
-    if board[x-1][y] == 1 or board[x][y-1] == 1:
-      dy[x][y][d] = 0
-    else:
-      dy[x][y][d] += ans(x-1, y-1, 0)
-      dy[x][y][d] += ans(x-1, y-1, 1)
-      dy[x][y][d] += ans(x-1, y-1, 2)
-  else:
-    dy[x][y][d] += ans(x-1, y, 1)
-    dy[x][y][d] += ans(x-1, y, 2)
-  return dy[x][y][d]
 
 
-
-      
 
 
 
@@ -64,24 +41,62 @@ def ans(x, y, d):
 if __name__=="__main__":
   n = int(input().strip())
   board = []
+  sec = 0
   for _ in range(n):
     board.append(list(map(int, input().strip().split())))
-  dy = [[[-1, -1, -1] for _ in range(n)] for _ in range(n)]
-  
-  dy[0][0] = [0, 0, 0]
-  dy[0][1] = [1, 0, 0]
- 
-  for i in range(2, n):
-    if board[0][i] == 0:
-      dy[0][i] = dy[0][i-1][:]
-    else:
-      dy[0][i] = [0, 0, 0]
   for i in range(n):
-    dy[i][0] = [0, 0, 0]
+    for j in range(n):
+      if board[i][j] == 9:
+        shark = (i, j)
+        break
+  size = 2
+  acc = 0
+  while(1):
+    q = deque([(shark[0], shark[1], 0)])
+    visited = [[0] * n for _ in range(n)]
+    board[shark[0]][shark[1]] = 0
+    visited[shark[0]][shark[1]] = 1
+    cand = []
 
-  for k in range(3):
-    ans(n-1, n-1, k)
+    while(q):
+      x, y, d = q.popleft()
+      for k in range(4):
+        nx = x + dx[k]
+        ny = y + dy[k]
+        if 0 <= nx < n and 0 <= ny < n and visited[nx][ny] == 0:
+          if board[nx][ny] == size or board[nx][ny] == 0:
+            visited[nx][ny] = 1
+            q.append((nx, ny, d+1))
+          elif 0 < board[nx][ny] < size:
+            q.append((nx, ny, d+1))
+            visited[nx][ny] = 1
+            cand.append((nx, ny, board[nx][ny], d+1))
+  
+    if not cand:
+      print(sec)
+      break 
+    cand.sort(key= lambda x: (x[3], x[0], x[1]))
+    tx, ty, ts, td = cand[0]
+
+    board[tx][ty] = 0
+    acc += 1
+
+    if acc == size:
+      acc = 0
+      size += 1
+  
+    sec += td
+    shark = (tx, ty)
     
-   
 
-  print(sum(dy[n-1][n-1]))
+
+    
+
+
+
+
+
+
+
+
+    
