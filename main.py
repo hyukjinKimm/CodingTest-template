@@ -37,66 +37,47 @@ mod = 1000000007
 
 
 
-
 if __name__=="__main__":
-  n = int(input().strip())
-  board = []
-  sec = 0
+  n, k = map(int, input().strip().split())
+  mv = []
   for _ in range(n):
-    board.append(list(map(int, input().strip().split())))
+    mv.append(list(map(int, input().strip().split())))
+  mv.sort()
+  
+  bags = []
+  for _ in range(k):
+    bags.append(int(input().strip()))
+  bags.sort()
+  bags = deque(bags)
+  
+  q = []
+  res = 0
+  print(mv, bags)
   for i in range(n):
-    for j in range(n):
-      if board[i][j] == 9:
-        shark = (i, j)
-        break
-  size = 2
-  acc = 0
-  while(1):
-    q = deque([(shark[0], shark[1], 0)])
-    visited = [[0] * n for _ in range(n)]
-    board[shark[0]][shark[1]] = 0
-    visited[shark[0]][shark[1]] = 1
-    cand = []
+    m, v = mv[i]  #현재 보는 보석의 무게와 가치 
+    if m <= bags[0]:
+      heapq.heappush(q, -v)
+    else: # 보는 보석이 제일 작은 가방 보다 큼..
+      # q 에 보석이 있을때 
+      # q 에 보석이 없을때 
+      bags.popleft()
+      if q:
+        res += -heapq.heappop(q)
 
-    while(q):
-      x, y, d = q.popleft()
-      for k in range(4):
-        nx = x + dx[k]
-        ny = y + dy[k]
-        if 0 <= nx < n and 0 <= ny < n and visited[nx][ny] == 0:
-          if board[nx][ny] == size or board[nx][ny] == 0:
-            visited[nx][ny] = 1
-            q.append((nx, ny, d+1))
-          elif 0 < board[nx][ny] < size:
-            q.append((nx, ny, d+1))
-            visited[nx][ny] = 1
-            cand.append((nx, ny, board[nx][ny], d+1))
-  
-    if not cand:
-      print(sec)
-      break 
-    cand.sort(key= lambda x: (x[3], x[0], x[1]))
-    tx, ty, ts, td = cand[0]
+      if not bags:break 
+  else:
+    print('hi', q, bags)
 
-    board[tx][ty] = 0
-    acc += 1
-
-    if acc == size:
-      acc = 0
-      size += 1
-  
-    sec += td
-    shark = (tx, ty)
-    
-
-
-    
-
-
-
-
+    if bags:
+      while(q):
+        res += -heapq.heappop(q)
+  print(res)
 
 
 
 
     
+      
+
+
+
