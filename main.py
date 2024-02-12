@@ -34,50 +34,46 @@ mod = 1000000007
   
 
 
+# left_value <= x <= right_value
+def count_range(array, left_value, right_value):
+    right_index = bisect_right(array, right_value)
+    left_index = bisect_left(array, left_value)
+
+    return right_index - left_index
 
 
+
+  
 
 if __name__=="__main__":
-  n, k = map(int, input().strip().split())
-  mv = []
-  for _ in range(n):
-    mv.append(list(map(int, input().strip().split())))
-  mv.sort()
-  
-  bags = []
-  for _ in range(k):
-    bags.append(int(input().strip()))
-  bags.sort()
-  bags = deque(bags)
-  
-  q = []
-  res = 0
-  print(mv, bags)
+  s = input().strip()
+  n = len(s)
+  yn = [[False] * (n) for _ in range(n)]
+
   for i in range(n):
-    m, v = mv[i]  #현재 보는 보석의 무게와 가치 
-    if m <= bags[0]:
-      heapq.heappush(q, -v)
-    else: # 보는 보석이 제일 작은 가방 보다 큼..
-      # q 에 보석이 있을때 
-      # q 에 보석이 없을때 
-      bags.popleft()
-      if q:
-        res += -heapq.heappop(q)
+     yn[i][i] = True 
 
-      if not bags:break 
-  else:
-    print('hi', q, bags)
+  for i in range(n-1):
+     if s[i] == s[i+1]:
+        yn[i][i+1] = True
 
-    if bags:
-      while(q):
-        res += -heapq.heappop(q)
-  print(res)
+  for length in range(3, n+1):
+    for start in range(0, n-length+1):
+       end = start + length - 1 
+       if s[start] == s[end] and yn[start+1][end-1]:
+          yn[start][end] = True
+  
+  dy = [float('inf')] * (n+1)
+  dy[0] = 0 
+  dy[1] = 1
+  for end in range(2, n+1):
+     for start in range(1, end+1):
+        if yn[start-1][end-1]:
+           dy[end] = min(dy[end], dy[start-1]+1)
+           
+  print(dy)
+  print(dy[n])
 
+  
 
-
-
-    
-      
-
-
-
+ 
