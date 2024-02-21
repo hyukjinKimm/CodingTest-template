@@ -130,7 +130,24 @@ for i in range(1, h+1):
             graph[i][j] = graph[i-1][j-1] + 1
         else:
             graph[i][j] = max(graph[i][j-1], graph[i-1][j])
-
+  res = ""
+  i = len(b)
+  j = len(a)
+  maxVal = graph[-1][-1]
+  while(1):
+      if i == 0 or j == 0: break 
+      if graph[i][j] == graph[i][j-1]:
+          j -= 1
+      elif graph[i][j] == graph[i-1][j]:
+          i -= 1
+      else:
+        
+          res += b[i-1]
+          maxVal -= 1
+          i -= 1
+          j -= 1
+  print(len(res))
+  print(res[::-1])
 
 # LCS (가장 긴 SUBSTRING )
 
@@ -172,3 +189,19 @@ def edit_dist(str1, str2) :
 # 두 문자열을 입력받기
 str1 = input()
 str2 = input()
+
+
+
+import math
+
+# n개 중 r개를 뽑아서 정렬하는 순열의 개수 출력
+a = math.perm(n, r)
+print(a)
+
+# n개 중 r개를 뽑는 조합의 개수 출력
+b = math.comb(n, r)
+print(b)
+
+# n개 중 r개를 중복을 허용하여 뽑는 중복 조합의 개수 출력
+c = math.comb(n + r - 1, r)
+print(c)

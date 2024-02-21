@@ -65,3 +65,8 @@ bfs
   isused01 = [0] * (n * 2 - 1) 
   isused02 = [0] * (n * 2 - 1)
   isused01[x + y] ,  isused02[x - y + n - 1]
+
+
+LIS (최대증가수열)
+다이나믹 -> N^2 
+로워 바운드 ->nlogN

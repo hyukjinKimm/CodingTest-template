@@ -18,8 +18,9 @@ input = sys.stdin.readline
             
 
 
-dx = [0, -1, 0, 1]
-dy = [1, 0, -1, 0]
+dx = [-1, 1, 0, 0]
+dy = [0, 0, 1, -1]
+
 
 
 
@@ -27,53 +28,36 @@ dy = [1, 0, -1, 0]
 
 INF = float('inf')
 
-mod = 1000000007
 
+def recur(row, col, first_col):
+
+    if row == n:
+        return 0
+
+    if dp[row][col] != INF:
+        return dp[row][col]
   
+    for j in range(3):
+        if j == col:
+            continue
+        elif row == n - 2 and j == first_col:
+            continue
+        dp[row][col]= min(dp[row][col], recur(row + 1, j, first_col) + rgb[row][col])
 
-  
-
-
-# left_value <= x <= right_value
-def count_range(array, left_value, right_value):
-    right_index = bisect_right(array, right_value)
-    left_index = bisect_left(array, left_value)
-
-    return right_index - left_index
-
-
-
-  
+    return dp[row][col]
 
 if __name__=="__main__":
-  s = input().strip()
-  n = len(s)
-  yn = [[False] * (n) for _ in range(n)]
-
-  for i in range(n):
-     yn[i][i] = True 
-
-  for i in range(n-1):
-     if s[i] == s[i+1]:
-        yn[i][i+1] = True
-
-  for length in range(3, n+1):
-    for start in range(0, n-length+1):
-       end = start + length - 1 
-       if s[start] == s[end] and yn[start+1][end-1]:
-          yn[start][end] = True
-  
-  dy = [float('inf')] * (n+1)
-  dy[0] = 0 
-  dy[1] = 1
-  for end in range(2, n+1):
-     for start in range(1, end+1):
-        if yn[start-1][end-1]:
-           dy[end] = min(dy[end], dy[start-1]+1)
-           
-  print(dy)
-  print(dy[n])
-
+    n = int(input().strip())
+    rgb = []
+    for _ in range(n):
+        rgb.append(list(map(int, input().strip().split())))
+    ans = float('inf')
   
 
- 
+    for i in range(3):
+        dp = [[INF] * 3 for _ in range(n)]
+        recur(0, i, i)
+        ans = min(ans, dp[0][i])
+
+    print(ans)
+    
