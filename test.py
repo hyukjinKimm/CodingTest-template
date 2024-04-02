@@ -1,94 +1,31 @@
-from collections import deque
-import copy
+
+
+board = [[1, 2, 3],
+        [4, 5, 6],
+        [7, 8 , 9]]
+
+dx = [0, 1, 0, -1]
+dy = [1, 0, -1, 0]
+def turn(x1, y1, x2, y2):
+  
+  pre = board[x1][y1]
+  x, y = x1, y1
+  d = 0
+  while(d < 4):
+    nx = x + dx[d]
+    ny = y + dy[d]
+    if not (0 <= nx <= x2 and 0 <= ny <= y2):
+      d += 1
+      continue
+    board[nx][ny], pre = pre, board[nx][ny]
+    x, y = nx, ny
+turn(0, 0, 2, 2)
+
+for i in range(len(board)):
+  print(board[i])
 
 
 
-def left(board):
-  newBoard = [[0] * n for _ in range(n)]
-  for i in range(n):
-    cursor = 0
-    for j in range(n):
-      if board[i][j] != 0:
-        if newBoard[i][cursor] == 0:
-          newBoard[i][cursor] = board[i][j]
-        elif newBoard[i][cursor] == board[i][j]:
-          newBoard[i][cursor] *= 2
-          cursor += 1
-        else:
-          cursor += 1
-          newBoard[i][cursor] = board[i][j]
-          
-  return newBoard
-def right(board):
-  newBoard = [[0] * n for _ in range(n)]
-  for i in range(n):
-    cursor = n-1
-    for j in range(n-1, -1, -1):
-      if board[i][j] != 0:
-        if newBoard[i][cursor] == 0:
-          newBoard[i][cursor] = board[i][j]
-        elif newBoard[i][cursor] == board[i][j]:
-          newBoard[i][cursor] *= 2
-          cursor -= 1
-        else:
-          cursor -= 1
-          newBoard[i][cursor] = board[i][j]
-          
-  return newBoard
-
-def down(board):
-  newBoard = [[0] * n for _ in range(n)]
-  for j in range(n):
-    cursor = n-1
-    for i in range(n-1, -1, -1):
-      if board[i][j] != 0:
-        if newBoard[cursor][j] == 0:
-          newBoard[cursor][j] = board[i][j]
-        elif newBoard[cursor][j] == board[i][j]:
-          newBoard[cursor][j] *= 2
-          cursor -= 1
-        else:
-          cursor -= 1
-          newBoard[cursor][j] = board[i][j]
-          
-  return newBoard
-
-def up(board):
-  newBoard = [[0] * n for _ in range(n)]
-  for j in range(n):
-    cursor = 0
-    for i in range(n):
-      if board[i][j] != 0:
-        if newBoard[cursor][j] == 0:
-          newBoard[cursor][j] = board[i][j]
-        elif newBoard[cursor][j] == board[i][j]:
-          newBoard[cursor][j] *= 2
-          cursor += 1
-        else:
-          cursor += 1
-          newBoard[cursor][j] = board[i][j]
-  return newBoard
 
 
 
-board = [[4, 2, 2], 
-         [8, 2, 4], 
-         [8, 8, 16]]
-n = 3
-new = down(board)
-for j in range(n):
-  print(new[j])
-
-new = up(board)
-print()
-for j in range(n):
-  print(new[j])
-
-new = left(board)
-print()
-for j in range(n):
-  print(new[j])
-new = left(new)
-print()
-for j in range(n):
-  print(new[j])

@@ -205,3 +205,32 @@ print(b)
 # n개 중 r개를 중복을 허용하여 뽑는 중복 조합의 개수 출력
 c = math.comb(n + r - 1, r)
 print(c)
+
+
+# 진수
+# base 진법의 string 을 10 진수로 나타냄
+int(string, base)
+
+print(int('111',2))
+print(int('222',3))
+print(int('333',4))
+print(int('444',5))
+print(int('555',6))
+print(int('FFF',16))
+
+# 10진수를 2, 8, 16 진수로 
+print(bin(10))
+print(oct(10))
+print(hex(10))
+
+
+# 10진수를 n 진수로
+import string
+
+tmp = string.digits+string.ascii_lowercase
+def convert(num, base) :
+    q, r = divmod(num, base)
+    if q == 0 :
+        return tmp[r] 
+    else :
+        return convert(q, base) + tmp[r]

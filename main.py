@@ -1,63 +1,35 @@
 import sys
-from collections import deque
-from itertools import combinations_with_replacement
-from itertools import combinations
-from itertools import permutations
-from itertools import product
-from bisect import bisect_left, bisect_right
-import heapq
-import math
-import copy
+
+sys.stdin = open("input.txt", "r")
+
+input = sys.stdin.readline 
 
 
-sys.setrecursionlimit(10**7)
-sys.stdin=open("input.txt", "r")
-input = sys.stdin.readline
+# 3을 2개로 
+2 + 1 
+# 결과 출력함수
+# 결과 출력함수
+def P(n, s, index):
+  if s == N:
+    for r in range(index):
+      print(result[r], end = ' ')
+    print()
+    return 
 
-
-            
-
-
-dx = [-1, 1, 0, 0]
-dy = [0, 0, 1, -1]
-
-
-
-
-
-
-INF = float('inf')
-
-
-def recur(row, col, first_col):
-
-    if row == n:
-        return 0
-
-    if dp[row][col] != INF:
-        return dp[row][col]
+  if index == K: return
   
-    for j in range(3):
-        if j == col:
-            continue
-        elif row == n - 2 and j == first_col:
-            continue
-        dp[row][col]= min(dp[row][col], recur(row + 1, j, first_col) + rgb[row][col])
+  for i in range(n, 0, -1):
+    if index == 0 or result[index-1] >= i:
+      result[index] = i
+      P(n-i, s+i, index+1)
 
-    return dp[row][col]
 
-if __name__=="__main__":
-    n = int(input().strip())
-    rgb = []
-    for _ in range(n):
-        rgb.append(list(map(int, input().strip().split())))
-    ans = float('inf')
-  
 
-    for i in range(3):
-        dp = [[INF] * 3 for _ in range(n)]
-        recur(0, i, i)
-        ans = min(ans, dp[0][i])
 
-    print(ans)
     
+
+
+if __name__ == "__main__":
+  N, K = 7, 3
+  result = [0] * K
+  P(N, 0, 0)
